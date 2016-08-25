@@ -113,6 +113,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SocialMediaAdapters\SocialMediaAdapters.csproj">
+      <Project>{a00b5f39-5d8a-4267-94c6-186f318f3158}</Project>
+      <Name>SocialMediaAdapters</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

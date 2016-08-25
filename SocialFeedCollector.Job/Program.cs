@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SocialMediaAdapters;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -32,8 +33,18 @@ namespace SocialFeedCollector.Job
                 TokenHelper.GetClientContextWithAccessToken(
                     siteUri.ToString(), accessToken))
             {
-                //Todo: get feeds and insert to list...
+                Task.Run(async () =>
+                {
+                    // Do any async anything you need here without worry
+                }).Wait();
             }
+        }
+
+        private static async Task<List<SocialFeedItem>> SearchTwitter()
+        {
+            TwitterAdapter.ConsumerKey = ConfigurationManager.AppSettings["TwitterConsumerKey"].ToString();
+            TwitterAdapter.ConsumerSecret = System.Web.HttpContext.Current.Application["TwitterConsumerSecret"].ToString();
+            var results = await TwitterAdapter.SearchAsync(query);
         }
     }
 }
