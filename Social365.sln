@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialFeedCollector.Job", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialMediaAdapters", "SocialMediaAdapters\SocialMediaAdapters.csproj", "{A00B5F39-5D8A-4267-94C6-186F318F3158}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialFeedCollector.ListInstances", "SocialFeedCollector.ListInstances\SocialFeedCollector.ListInstances.csproj", "{9CEF44FD-476B-4BE7-B338-295CD56DAA0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,12 @@ Global
 		{A00B5F39-5D8A-4267-94C6-186F318F3158}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A00B5F39-5D8A-4267-94C6-186F318F3158}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A00B5F39-5D8A-4267-94C6-186F318F3158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CEF44FD-476B-4BE7-B338-295CD56DAA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CEF44FD-476B-4BE7-B338-295CD56DAA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CEF44FD-476B-4BE7-B338-295CD56DAA0C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9CEF44FD-476B-4BE7-B338-295CD56DAA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CEF44FD-476B-4BE7-B338-295CD56DAA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CEF44FD-476B-4BE7-B338-295CD56DAA0C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

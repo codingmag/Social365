@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="1034bd52-f538-4bce-9961-d10649b8d60f" 
+        solutionId="1034bd52-f538-4bce-9961-d10649b8d60f" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="SocialFeedCollector.ListInstances"
+        sharePointProductVersion="16.0">
+  <features>
+        <featureReference itemId="eb3a40e0-a8c5-4751-9389-75c61533c25a" />
+  </features>
+</package>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<List xmlns:ows="Microsoft SharePoint" Title="SocialFeeds" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/SocialFeeds" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/">
+  <MetaData>
+    <ContentTypes>
+      
+      
+    <ContentType ID="0x0100557169616fde4bddac569e0434b61934" Name="ListFieldsContentType"><FieldRefs><FieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" /><FieldRef ID="{5fdb3eac-6b3c-42f9-80ba-2e711ec2e51e}" Name="Text" /><FieldRef ID="{ac9798d0-caff-4b16-bcad-f8ec474a969e}" Name="Source" /><FieldRef ID="{1b62e156-6e13-483a-9a64-cacd2b5f825f}" Name="Thumbnail1" /><FieldRef ID="{7d83f7a0-d346-4815-80a1-14fb483d39f2}" Name="DateCreated" /><FieldRef ID="{e244183f-b965-45ea-8979-89d65decb26a}" Name="DetailsLink" /></FieldRefs></ContentType><ContentTypeRef ID="0x01">
+        <Folder TargetName="Item" />
+      </ContentTypeRef><ContentTypeRef ID="0x0120" /></ContentTypes>
+    <Fields>
+      
+    <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" DisplayName="Username" Required="TRUE" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="Title" MaxLength="255" /><Field Name="Text" ID="{5fdb3eac-6b3c-42f9-80ba-2e711ec2e51e}" DisplayName="Text" Type="Text" Required="TRUE" /><Field Name="Source" ID="{ac9798d0-caff-4b16-bcad-f8ec474a969e}" DisplayName="Source" Type="MultiChoice" Required="TRUE" /><Field Name="Thumbnail1" ID="{1b62e156-6e13-483a-9a64-cacd2b5f825f}" DisplayName="Thumbnail" Type="URL" /><Field Name="DateCreated" ID="{7d83f7a0-d346-4815-80a1-14fb483d39f2}" DisplayName="DateCreated" Type="DateTime" Required="TRUE" /><Field Name="DetailsLink" ID="{e244183f-b965-45ea-8979-89d65decb26a}" DisplayName="DetailsLink" Type="URL" /></Fields>
+    <Views>
+      
+      
+    <View BaseViewID="0" Type="HTML" MobileView="TRUE" TabularView="FALSE">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          
+        <FieldRef Name="LinkTitleNoMenu"></FieldRef></ViewFields>
+        <Query>
+          <OrderBy>
+            
+          <FieldRef Name="Modified" Ascending="FALSE"></FieldRef></OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="AddNewAnnouncement" Location="Resource(wss,addnewitem)" />
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_ONET_HOME)" />
+        </ParameterBindings>
+      </View><View BaseViewID="1" Type="HTML" WebPartZoneID="Main" DisplayName="$Resources:core,objectiv_schema_mwsidcamlidC24;" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" SetupPath="pages\viewpage.aspx" ImageUrl="/_layouts/15/images/generic.png?rev=23" Url="AllItems.aspx">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <JSLink>clienttemplates.js</JSLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          
+        <FieldRef Name="LinkTitle"></FieldRef><FieldRef Name="Text" /><FieldRef Name="Source" /><FieldRef Name="Thumbnail1" /><FieldRef Name="DateCreated" /><FieldRef Name="DetailsLink" /></ViewFields>
+        <Query>
+          <OrderBy>
+            
+          <FieldRef Name="ID"></FieldRef></OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_DEFAULT)" />
+        </ParameterBindings>
+      </View></Views>
+    <Forms>
+      <Form Type="DisplayForm" Url="DispForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="EditForm" Url="EditForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="NewForm" Url="NewForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+    </Forms>
+  </MetaData>
+</List>

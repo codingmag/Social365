@@ -1,4 +1,5 @@
-﻿using SocialMediaAdapters;
+﻿using Microsoft.SharePoint.Client;
+using SocialMediaAdapters;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,7 +11,14 @@ namespace SocialFeedCollector.Job
 {
     class Program
     {
+        private const string Query = "brexit"; 
+
         static void Main(string[] args)
+        {
+            Task.Run(async () => { MainAsync(); }).Wait();
+        }
+
+        private static async Task MainAsync()
         {
             if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["SharePointSiteUrl"]))
             {
@@ -18,33 +26,38 @@ namespace SocialFeedCollector.Job
             }
 
             var siteUri = new Uri(ConfigurationManager.AppSettings["SharePointSiteUrl"]);
-            
-            //Get the realm for the URL
+
             var realm = TokenHelper.GetRealmFromTargetUrl(siteUri);
-
-            // Get the access token for the URL.  
-            //   Requires this app to be registered with the tenant
-            var accessToken = TokenHelper.GetAppOnlyAccessToken(
-                TokenHelper.SharePointPrincipal,
-                siteUri.Authority, realm).AccessToken;
-
-            // Get client context with access token
-            using (var clientContext =
-                TokenHelper.GetClientContextWithAccessToken(
-                    siteUri.ToString(), accessToken))
+            var accessToken = TokenHelper.GetAppOnlyAccessToken(TokenHelper.SharePointPrincipal, siteUri.Authority, realm).AccessToken;
+            using (var clientContext = TokenHelper.GetClientContextWithAccessToken(siteUri.ToString(), accessToken))
             {
-                Task.Run(async () =>
+                var tweets = await SearchTwitterAsync(Query);
+                foreach (var tweet in tweets)
                 {
-                    // Do any async anything you need here without worry
-                }).Wait();
+                    if (!ItemExists(clientContext))
+                    {
+                        AddItem(clientContext, tweet);
+                    }
+                }
             }
         }
 
-        private static async Task<List<SocialFeedItem>> SearchTwitter()
+        private static void AddItem(ClientContext context, SocialFeedItem tweet)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static async Task<List<SocialFeedItem>> SearchTwitterAsync(string query)
         {
             TwitterAdapter.ConsumerKey = ConfigurationManager.AppSettings["TwitterConsumerKey"].ToString();
             TwitterAdapter.ConsumerSecret = System.Web.HttpContext.Current.Application["TwitterConsumerSecret"].ToString();
             var results = await TwitterAdapter.SearchAsync(query);
+            return results;
+        }
+
+        private static bool ItemExists(ClientContext context)
+        {
+            
         }
     }
 }

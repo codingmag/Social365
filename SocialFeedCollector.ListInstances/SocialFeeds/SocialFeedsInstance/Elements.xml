@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="SocialFeeds" OnQuickLaunch="TRUE" TemplateType="100" Url="Lists/SocialFeeds" Description="The list that contains social media feeds."></ListInstance>
+</Elements>
