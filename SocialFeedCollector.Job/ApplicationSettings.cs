@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SocialFeedCollector.Job
 {
-    public class AppSettings
+    public class ApplicationSettings
     {
         public string Query { get; set; }
 

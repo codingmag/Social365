@@ -58,11 +58,11 @@
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
-    <None Include="Features\Feature1\Feature1.feature">
+    <None Include="Features\ListInstancesFeature\ListInstancesFeature.feature">
       <FeatureId>{eb3a40e0-a8c5-4751-9389-75c61533c25a}</FeatureId>
     </None>
-    <None Include="Features\Feature1\Feature1.Template.xml">
-      <DependentUpon>Feature1.feature</DependentUpon>
+    <None Include="Features\ListInstancesFeature\ListInstancesFeature.Template.xml">
+      <DependentUpon>ListInstancesFeature.feature</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

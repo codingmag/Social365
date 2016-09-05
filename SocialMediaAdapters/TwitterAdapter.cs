@@ -48,7 +48,7 @@ namespace SocialMediaAdapters
                                    Source = FeedSource.Twitter,
                                    Text = result.Text,
                                    ThumbnailUrl = result.User.ProfileImageUrl,
-                                   UserName = result.User.ScreenNameResponse
+                                   Username = result.User.ScreenNameResponse
                                }).ToList();
 
             return twitterFeed;

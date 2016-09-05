@@ -11,35 +11,48 @@ namespace SocialFeedCollector.Job
 {
     class Program
     {
-        private static AppSettings appSettings; 
+        private static ApplicationSettings appSettings;
+        
+        public static ApplicationSettings AppSettings
+        {
+            get
+            {
+                if (appSettings == null)
+                {
+                    appSettings = new ApplicationSettings();
+                    GetValidateAppSettings();
+                }
+
+                return appSettings;
+            }
+        }
 
         static void Main(string[] args)
         {
-            GetValidateAppSettings();
             Task.Run(async () => { MainAsync(); }).Wait();
         }
 
         private static async Task MainAsync()
         {
-            var realm = TokenHelper.GetRealmFromTargetUrl(appSettings.SiteUri);
-            var accessToken = TokenHelper.GetAppOnlyAccessToken(TokenHelper.SharePointPrincipal, appSettings.SiteUri.Authority, realm).AccessToken;
-            using (var clientContext = TokenHelper.GetClientContextWithAccessToken(appSettings.SiteUri.ToString(), accessToken))
+            var realm = TokenHelper.GetRealmFromTargetUrl(AppSettings.SiteUri);
+            var accessToken = TokenHelper.GetAppOnlyAccessToken(TokenHelper.SharePointPrincipal, AppSettings.SiteUri.Authority, realm).AccessToken;
+            using (var clientContext = TokenHelper.GetClientContextWithAccessToken(AppSettings.SiteUri.ToString(), accessToken))
             {
                 // Check if the list to insert tweets exists
-                if (!ListExists(clientContext, appSettings.ListName))
+                if (!ListExists(clientContext, AppSettings.ListName))
                 {
-                    throw new Exception(string.Format("The list with name {0} has not been found in the target SharePoint site {1}.", appSettings.ListName, appSettings.SiteUri.ToString());
+                    throw new Exception(string.Format("The list with name {0} has not been found in the target SharePoint site {1}.", AppSettings.ListName, AppSettings.SiteUri.ToString()));
                 }
 
                 // Get tweets for the query
-                var tweets = await SearchTwitterAsync(appSettings.Query);
+                var tweets = await SearchTwitterAsync(AppSettings.Query);
 
                 // Add the tweets to SharePoint list
                 foreach (var tweet in tweets)
                 {
-                    if (!ItemExists(clientContext, appSettings.ListName, tweet))
+                    if (!ItemExists(clientContext, AppSettings.ListName, tweet))
                     {
-                        AddItem(clientContext, appSettings.ListName, tweet);
+                        AddItem(clientContext, AppSettings.ListName, tweet);
                     }
                 }
             }
