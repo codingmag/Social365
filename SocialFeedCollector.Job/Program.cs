@@ -1,5 +1,8 @@
 ﻿using Microsoft.SharePoint.Client;
+using SocialFeedCollector.Job.Models;
 using SocialMediaAdapters;
+using SocialMediaAdapters.Adapters;
+using SocialMediaAdapters.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

@@ -176,12 +176,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FeedSource.cs" />
-    <Compile Include="GoogleAdapter.cs" />
-    <Compile Include="InstagramAdapter.cs" />
-    <Compile Include="InstagramOAuth.cs" />
-    <Compile Include="SocialFeedItem.cs" />
-    <Compile Include="TwitterAdapter.cs" />
+    <Compile Include="Models\FeedSource.cs" />
+    <Compile Include="Adapters\GoogleAdapter.cs" />
+    <Compile Include="Adapters\InstagramAdapter.cs" />
+    <Compile Include="Adapters\InstagramOAuth.cs" />
+    <Compile Include="Models\SocialFeedItem.cs" />
+    <Compile Include="Adapters\TwitterAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

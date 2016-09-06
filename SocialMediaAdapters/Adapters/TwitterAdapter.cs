@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialMediaAdapters
+namespace SocialMediaAdapters.Adapters
 {
     using System.Web;
     using System.Web.Mvc;
 
     using LinqToTwitter;
+    using Models;
 
     public static class TwitterAdapter
     {

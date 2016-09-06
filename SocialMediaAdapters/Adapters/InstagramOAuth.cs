@@ -1,4 +1,4 @@
-﻿namespace SocialMediaAdapters
+﻿namespace SocialMediaAdapters.Adapters
 {
     using System.Net.Http;
 

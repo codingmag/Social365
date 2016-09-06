@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialFeedCollector.Job
+namespace SocialFeedCollector.Job.Models
 {
     public class ApplicationSettings
     {

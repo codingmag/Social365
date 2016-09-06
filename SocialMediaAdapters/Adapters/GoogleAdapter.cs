@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialMediaAdapters
+namespace SocialMediaAdapters.Adapters
 {
     using System.ServiceModel.Discovery;
     using System.Web.Mvc;
