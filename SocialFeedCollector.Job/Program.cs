@@ -32,7 +32,8 @@ namespace SocialFeedCollector.Job
 
         static void Main(string[] args)
         {
-            Task.Run(async () => { MainAsync(); }).Wait();
+            var mainTask = MainAsync();
+            mainTask.Wait();
         }
 
         private static async Task MainAsync()
@@ -116,8 +117,8 @@ namespace SocialFeedCollector.Job
 
         private static void AddItem(ClientContext context, string listTitle, SocialFeedItem socialFeedItem)
         {
-            var web = context.Web;
-            var list = web.GetList(listTitle);
+            var list = context.Web.Lists.GetByTitle(listTitle);
+            context.ExecuteQuery();
             var listItemInfo = new ListItemCreationInformation();
             var listItem = list.AddItem(listItemInfo);
             listItem["Title"] = socialFeedItem.Username;
@@ -141,8 +142,10 @@ namespace SocialFeedCollector.Job
         private static async Task<List<SocialFeedItem>> SearchTwitterAsync(string query)
         {
             TwitterAdapter.ConsumerKey = ConfigurationManager.AppSettings["TwitterConsumerKey"].ToString();
-            TwitterAdapter.ConsumerSecret = System.Web.HttpContext.Current.Application["TwitterConsumerSecret"].ToString();
+            TwitterAdapter.ConsumerSecret = ConfigurationManager.AppSettings["TwitterConsumerSecret"].ToString();
+
             var results = await TwitterAdapter.SearchAsync(query);
+            
             return results;
         }
 
@@ -156,8 +159,7 @@ namespace SocialFeedCollector.Job
 
         private static bool ItemExists(ClientContext context, string listTitle, SocialFeedItem socialFeedItem)
         {
-            var web = context.Web;
-            var list = web.GetList(listTitle);
+            var list = context.Web.Lists.GetByTitle(listTitle);
             var listItemCamlQuery = new CamlQuery()
             {
                 ViewXml = string.Format(@"<View>
@@ -168,25 +170,40 @@ namespace SocialFeedCollector.Job
                                                             <FieldRef Name='Title' />
                                                             <Value Type='Text'>{0}</Value>
                                                         </Eq>
-                                                        <Eq>
-                                                            <FieldRef Name='Text' />
-                                                            <Value Type='Text'>{1}</Value>
-                                                        </Eq>
-                                                        <Eq>
-                                                            <FieldRef Name='Source' />
-                                                            <Value Type='Text'>{2}</Value>
-                                                        </Eq>
+                                                        <And>
+                                                            <Eq>
+                                                                <FieldRef Name='Text' />
+                                                                <Value Type='Text'>{1}</Value>
+                                                            </Eq>
+                                                            <Eq>
+                                                                <FieldRef Name='Source' />
+                                                                <Value Type='Choice'>{2}</Value>
+                                                            </Eq>
+                                                        </And>
+                                                    </And>
                                                 </Where>
                                             </Query>
                                         </View>",
-                                        socialFeedItem.Username,
-                                        socialFeedItem.Text,
-                                        socialFeedItem.Source)
+                                        "test",
+                                        "test",
+                                        "Twitter")
+                                        //socialFeedItem.Username,
+                                        //socialFeedItem.Text,
+                                        //socialFeedItem.Source)
             };
             var listItems = list.GetItems(listItemCamlQuery);
-            context.Load(listItems, items => items.Include(item => item.Id));
-            context.ExecuteQuery();
-            return listItems.Count > 0;
+            //context.Load(listItems, items => items.Include(item => item.Id));
+            context.Load(listItems);
+            try
+            {
+                context.ExecuteQuery();
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

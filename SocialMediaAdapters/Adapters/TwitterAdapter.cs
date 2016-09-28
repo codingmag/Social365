@@ -31,7 +31,7 @@ namespace SocialMediaAdapters.Adapters
             };
 
             await auth.AuthorizeAsync();
-
+            
             var twitterCtx = new TwitterContext(auth);
 
             var searchResults =
