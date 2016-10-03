@@ -16,33 +16,32 @@ namespace SocialMediaAdapters.Adapters
     using Google.Apis.Plus.v1;
     using Google.Apis.Services;
     using Google.Apis.YouTube.v3;
-
+    using Models;
     public static class GoogleAdapter
     {
         public static string ApiKey;
 
-        public static string SearchGooglePlus(string query)
+        public static List<SocialFeedItem> SearchGooglePlus(string query)
         {
             var service = new PlusService(new Google.Apis.Services.BaseClientService.Initializer() { ApiKey = ApiKey });
             var activities = service.Activities.Search(query).Execute().Items;
 
-            var serializedResults = new StringBuilder();
+            var googlePlusFeed = (from result in activities
+                               select new SocialFeedItem()
+                               {
+                                   DateCreated = result.Published.Value,
+                                   DetailsUrl = result.Url,
+                                   Source = FeedSource.GooglePlus,
+                                   Text = result.Title,
+                                   ThumbnailUrl = result.Actor.Image.Url,
+                                   Username = result.Actor.DisplayName
+                               }).ToList();
 
-            foreach (var resultItem in activities)
-            {
-                serializedResults.AppendFormat(
-                        "<blockquote class=\"twitter-tweet\"><p>{0}</p><p><a href=\"{1}\"><img src=\"{2}\"/>{3}</a> - {4}</p></blockquote>",
-                        resultItem.Title,
-                        resultItem.Url,
-                        resultItem.Actor.Image.Url,
-                        resultItem.Actor.DisplayName,
-                        resultItem.Published);
-            }
-
-            return serializedResults.ToString();
+           
+            return googlePlusFeed;
         }
 
-        public static string SearchYouTube(string query)
+        public static List<SocialFeedItem> SearchYouTube(string query)
         {
             var service = new YouTubeService(new Google.Apis.Services.BaseClientService.Initializer() { ApiKey = ApiKey });
             var videoRequest = service.Search.List("snippet");
@@ -51,20 +50,18 @@ namespace SocialMediaAdapters.Adapters
 
             var videos = videoRequest.Execute().Items;
 
-            var serializedResults = new StringBuilder();
+            var youTubeVideos = (from result in videos
+                                 select new SocialFeedItem()
+                                  {
+                                      DateCreated = result.Snippet.PublishedAt.Value,
+                                      DetailsUrl = string.Format("https://www.youtube.com/watch?v={0}", result.Id.VideoId),
+                                      Source = FeedSource.YouTube,
+                                      Text = result.Snippet.Title,
+                                      ThumbnailUrl = result.Snippet.Thumbnails.Medium.Url,
+                                      Username = result.Snippet.ChannelTitle
+                                 }).ToList();
 
-            foreach (var resultItem in videos)
-            {
-                serializedResults.AppendFormat(
-                        "<blockquote class=\"twitter-tweet\"><p>{0}</p><p><a href=\"https://www.youtube.com/watch?v={1}\"><img src=\"{2}\"/>{3}</a> - {4}</p></blockquote>",
-                        resultItem.Snippet.Title,
-                        resultItem.Id.VideoId,
-                        resultItem.Snippet.Thumbnails.Medium.Url,
-                        resultItem.Snippet.ChannelTitle,
-                        resultItem.Snippet.PublishedAt);
-            }
-
-            return serializedResults.ToString();
+            return youTubeVideos;
         }
     }
 }

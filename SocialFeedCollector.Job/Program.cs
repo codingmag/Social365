@@ -59,6 +59,30 @@ namespace SocialFeedCollector.Job
                         AddItem(clientContext, AppSettings.ListName, tweet);
                     }
                 }
+
+                // Get google plus activity for the query
+                var googleActivity = SearchGooglePlus(AppSettings.Query);
+
+                // Add the activities to SharePoint list
+                foreach (var activity in googleActivity)
+                {
+                    if (!ItemExists(clientContext, AppSettings.ListName, activity))
+                    {
+                        AddItem(clientContext, AppSettings.ListName, activity);
+                    }
+                }
+
+                // Get YouTube videos for the query
+                var videos = SearchYouTube(AppSettings.Query);
+
+                // Add the videos to SharePoint list
+                foreach (var video in videos)
+                {
+                    if (!ItemExists(clientContext, AppSettings.ListName, video))
+                    {
+                        AddItem(clientContext, AppSettings.ListName, video);
+                    }
+                }
             }
         }
 
@@ -118,22 +142,21 @@ namespace SocialFeedCollector.Job
         private static void AddItem(ClientContext context, string listTitle, SocialFeedItem socialFeedItem)
         {
             var list = context.Web.Lists.GetByTitle(listTitle);
-            context.ExecuteQuery();
             var listItemInfo = new ListItemCreationInformation();
             var listItem = list.AddItem(listItemInfo);
             listItem["Title"] = socialFeedItem.Username;
-            listItem["Text"] = socialFeedItem.Text;
+            listItem["w4vj"] = ReplaceIllegalChars(socialFeedItem.Text);
             listItem["Source"] = socialFeedItem.Source.ToString();
             listItem["Thumbnail"] = new FieldUrlValue()
             {
                 Url = socialFeedItem.ThumbnailUrl,
                 Description = "User Image"
             };
-            listItem["DateCreated"] = socialFeedItem.DateCreated;
+            listItem["nnap"] = socialFeedItem.DateCreated.ToUniversalTime();
             listItem["DetailsLink"] = new FieldUrlValue()
             {
                 Url = socialFeedItem.DetailsUrl,
-                Description = "User Details"
+                Description = "Details"
             };
             listItem.Update();
             context.ExecuteQuery();
@@ -146,6 +169,22 @@ namespace SocialFeedCollector.Job
 
             var results = await TwitterAdapter.SearchAsync(query);
             
+            return results;
+        }
+
+        private static List<SocialFeedItem> SearchGooglePlus(string query)
+        {
+            GoogleAdapter.ApiKey = ConfigurationManager.AppSettings["GoogleAPIKey"].ToString();
+            var results = GoogleAdapter.SearchGooglePlus(query);
+
+            return results;
+        }
+
+        private static List<SocialFeedItem> SearchYouTube(string query)
+        {
+            GoogleAdapter.ApiKey = ConfigurationManager.AppSettings["GoogleAPIKey"].ToString();
+            var results = GoogleAdapter.SearchYouTube(query);
+
             return results;
         }
 
@@ -172,7 +211,7 @@ namespace SocialFeedCollector.Job
                                                         </Eq>
                                                         <And>
                                                             <Eq>
-                                                                <FieldRef Name='Text' />
+                                                                <FieldRef Name='w4vj' />
                                                                 <Value Type='Text'>{1}</Value>
                                                             </Eq>
                                                             <Eq>
@@ -183,27 +222,27 @@ namespace SocialFeedCollector.Job
                                                     </And>
                                                 </Where>
                                             </Query>
+                                            <RowLimit>1</RowLimit>
                                         </View>",
-                                        "test",
-                                        "test",
-                                        "Twitter")
-                                        //socialFeedItem.Username,
-                                        //socialFeedItem.Text,
-                                        //socialFeedItem.Source)
+                                        socialFeedItem.Username,
+                                        ReplaceIllegalChars(socialFeedItem.Text),
+                                        socialFeedItem.Source)
             };
             var listItems = list.GetItems(listItemCamlQuery);
-            //context.Load(listItems, items => items.Include(item => item.Id));
-            context.Load(listItems);
-            try
-            {
-                context.ExecuteQuery();
-            }
-            catch(Exception)
-            {
-                return false;
-            }
+            context.Load(listItems, items => items.Include(item => item.Id));
+            context.ExecuteQuery();
+            
+            return listItems.Count > 0;
+        }
 
-            return true;
+        private static string ReplaceIllegalChars(string textWithIllegalChars)
+        {
+            return textWithIllegalChars
+                .Replace("&", "&amp;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;")
+                .Replace("'","&#039;")
+                .Replace("\"", "&quot;");
         }
     }
 }

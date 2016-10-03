@@ -45,7 +45,7 @@ namespace SocialMediaAdapters.Adapters
                                select new SocialFeedItem()
                                {
                                    DateCreated = result.CreatedAt,
-                                   DetailsUrl = result.User.Url,
+                                   DetailsUrl = string.Format("https://twitter.com/{0}", result.User.ScreenNameResponse),
                                    Source = FeedSource.Twitter,
                                    Text = result.Text,
                                    ThumbnailUrl = result.User.ProfileImageUrl,
